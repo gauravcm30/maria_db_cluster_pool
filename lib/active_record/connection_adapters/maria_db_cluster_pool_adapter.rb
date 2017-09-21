@@ -300,14 +300,14 @@ module ActiveRecord
         available_connections
         begin
           connection.send(method, *args, &block)
+        rescue ActiveRecord::RecordInvalid => e
+          throw e
         rescue ArgumentError
           begin
             connection.send(method, *args)
           rescue ArgumentError
             connection.send(method)
           end
-        rescue ActiveRecord::RecordInvalid => e
-          throw e
         rescue => e
           # If the statement was a read statement and it wasn't forced against the master connection
           # try to reconnect if the connection is dead and then re-run the statement.
