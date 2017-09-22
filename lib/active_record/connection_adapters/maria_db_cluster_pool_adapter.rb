@@ -20,7 +20,7 @@ module ActiveRecord
             establish_adapter(server_config[:adapter])
             conn = send("#{server_config[:adapter]}_connection".to_sym, server_config)
             conn.class.send(:include, MariaDbClusterPool::ConnectTimeout) unless conn.class.include?(MariaDbClusterPool::ConnectTimeout)
-            conn.connect_timeout = server_config[:connect_timeout]
+            conn.connect_timeout = server_config[:connect_timeout] || 10
 
             pool_connections << conn
             pool_weights[conn] = server_config[:pool_weight]
