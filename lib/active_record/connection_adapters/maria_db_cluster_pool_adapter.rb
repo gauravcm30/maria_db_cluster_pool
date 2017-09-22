@@ -15,7 +15,7 @@ module ActiveRecord
           server_config[:pool_weight] = server_config[:pool_weight].to_i
           begin
             if logger
-              logger.error("GAURAV starting establish connecting to read connection #{server_config.inspect}")
+              logger.error("[#{Time.now.to_s}] GAURAV starting establish connecting to read connection #{server_config.inspect}")
             end
             establish_adapter(server_config[:adapter])
             conn = send("#{server_config[:adapter]}_connection".to_sym, server_config)
@@ -26,7 +26,7 @@ module ActiveRecord
             pool_weights[conn] = server_config[:pool_weight]
           rescue Exception => e
             if logger
-              logger.error("Error connecting to read connection #{server_config.inspect}")
+              logger.error("[#{Time.now.to_s}] Error connecting to read connection #{server_config.inspect}")
               logger.error(e)
             end
           end
