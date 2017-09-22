@@ -14,6 +14,9 @@ module ActiveRecord
           server_config = default_config.merge(server_config).with_indifferent_access
           server_config[:pool_weight] = server_config[:pool_weight].to_i
           begin
+            if logger
+              logger.error("GAURAV starting establish connecting to read connection #{server_config.inspect}")
+            end
             establish_adapter(server_config[:adapter])
             conn = send("#{server_config[:adapter]}_connection".to_sym, server_config)
             conn.class.send(:include, MariaDbClusterPool::ConnectTimeout) unless conn.class.include?(MariaDbClusterPool::ConnectTimeout)
