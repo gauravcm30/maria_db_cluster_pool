@@ -261,8 +261,10 @@ module ActiveRecord
       end
       
       def reset_available_connections
+        @logger.info("reset_available_connections is  : #{@available_connections.count} #{@available_connections.inspect}") if @logger
         @available_connections.each do |a|
           if a != nil
+            @logger.info("reset_available_connections trying to connect  : #{a.inspect}") if @logger
             a.reconnect! rescue nil
           end
         end
@@ -284,6 +286,7 @@ module ActiveRecord
 
       def next_usable_connection
         available = available_connections
+        @logger.info("next_usable_connection is  : #{available.count} #{available.inspect}") if @logger
         available.each do |a|
           if a != nil
             unless a.failed?
